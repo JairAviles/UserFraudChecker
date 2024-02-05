@@ -54,7 +54,7 @@ public class UserControllerIntegrationTest {
     @Test
     public void givenUserCheckerService_whenCheckUserAndRecordNotExists_thenThrowsNotFoundStatus() throws Exception {
         // had to mock this function due to the random function call
-        given(userCheckerService.getUserRecord(anyString(), anyString())).willReturn(null);
+        given(userCheckerService.findUserRecord(anyString(), anyString())).willReturn(null);
 
         mockMvc.perform(get("/api/users?email=test.user@example.com&phone=1234567890")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -66,7 +66,7 @@ public class UserControllerIntegrationTest {
         UserRecord mockUserRecord = new UserRecord("1", "John", "Doe", "1234567890", "email", "US");
 
         // had to mock this function due to the random function call
-        given(userCheckerService.getUserRecord(anyString(), anyString())).willReturn(mockUserRecord);
+        given(userCheckerService.findUserRecord(anyString(), anyString())).willReturn(mockUserRecord);
 
         mockMvc.perform(get("/api/users?email=test.user@example.com&phone=1234567890")
                         .contentType(MediaType.APPLICATION_JSON))
