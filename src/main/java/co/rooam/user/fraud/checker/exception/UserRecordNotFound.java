@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serial;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class BadRequestException extends RuntimeException {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserRecordNotFound extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public BadRequestException(@Nullable String message) {
+    public UserRecordNotFound(@Nullable String message) {
         super(message);
     }
 }
