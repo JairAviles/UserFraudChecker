@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static co.rooam.user.fraud.checker.util.RandomUtil.generateWeightedRandomBoolean;
+import static co.rooam.user.fraud.checker.util.RiskLevel.*;
 
 @Service
 public class UserCheckerServiceImpl implements UserCheckerService {
@@ -48,20 +49,17 @@ public class UserCheckerServiceImpl implements UserCheckerService {
         );
     }
 
+    // This function returns the risk level of the user based on the score calculated
     public UserRisk returnUserRisk(UserRecord userRecord) {
         riskFactors.clear(); // Clear risk factors list
 
         Integer score = 0; // initial value is low score
-
         // Get country risk score
         score += getCountryRiskScore(userRecord.countryCode());
-
         // Check if email is blacklisted
         score += getParamBlockListedRiskScore(userRecord.email(), "Email");
-
         // Check if phone is blacklisted
         score += getParamBlockListedRiskScore(userRecord.phone(), "Phone");
-
         // Calculate risk level based on the score
         String riskLevel = getRiskLevel(score);
 
@@ -70,9 +68,9 @@ public class UserCheckerServiceImpl implements UserCheckerService {
 
     private Integer getCountryRiskScore(String countryCode) {
         String countryRisk =
-                CountryCodeRiskList.isHighRiskCountryCode(countryCode) ? RiskLevel.HIGH.toString() :
-                CountryCodeRiskList.isMidRiskCountryCode(countryCode) ? RiskLevel.MID.toString() :
-                        RiskLevel.LOW.toString();
+                CountryCodeRiskList.isHighRiskCountryCode(countryCode) ? HIGH.toString() :
+                CountryCodeRiskList.isMidRiskCountryCode(countryCode) ? MID.toString() :
+                        LOW.toString();
 
         if (countryRisk.equals("HIGH")) {
             riskFactors.add("Country risk is high.");
@@ -92,7 +90,6 @@ public class UserCheckerServiceImpl implements UserCheckerService {
         boolean isEmailBlackListed = generateWeightedRandomBoolean(100, 20);
 
         if (isEmailBlackListed) {
-            // TODO: replace with stringBuilder
             riskFactors.add(parameterType + " " + parameter + " is blocklisted.");
             return 20;
         }
@@ -101,15 +98,11 @@ public class UserCheckerServiceImpl implements UserCheckerService {
 
     private String getRiskLevel(Integer score) {
         if (score >= 50) {
-            return RiskLevel.HIGH.toString();
+            return HIGH.toString();
         } else if (score >= 20) {
-            return RiskLevel.MID.toString();
+            return MID.toString();
         } else {
-            return RiskLevel.LOW.toString();
+            return LOW.toString();
         }
-    }
-
-    private enum RiskLevel {
-        LOW, MID, HIGH
     }
 }
