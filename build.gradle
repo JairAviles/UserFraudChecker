@@ -27,6 +27,7 @@ dependencies {
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
 }
 
+// Code coverage report
 jacocoTestReport {
 	reports {
 		xml.required = false
@@ -34,6 +35,19 @@ jacocoTestReport {
 	}
 }
 
-tasks.named('test') {
+// Task for building the zip file for upload
+tasks.register('buildZip', Zip) {
+	from compileJava
+	from processResources
+	into('lib') {
+		from(configurations.compileClasspath) {
+			exclude 'tomcat-embed-*'
+		}
+	}
+}
+
+build.dependsOn buildZip
+
+test {
 	useJUnitPlatform()
 }
