@@ -2,7 +2,7 @@ package co.rooam.user.fraud.checker.service;
 
 import co.rooam.user.fraud.checker.model.UserRecord;
 import co.rooam.user.fraud.checker.model.UserRisk;
-import co.rooam.user.fraud.checker.util.CountryCodeRiskList;
+import co.rooam.user.fraud.checker.util.CountryCodeRiskLevel;
 import net.datafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +68,8 @@ public class UserCheckerServiceImpl implements UserCheckerService {
 
     private Integer getCountryRiskScore(String countryCode) {
         String countryRisk =
-                CountryCodeRiskList.isHighRiskCountryCode(countryCode) ? HIGH.toString() :
-                CountryCodeRiskList.isMidRiskCountryCode(countryCode) ? MID.toString() :
+                CountryCodeRiskLevel.isHighRiskCountryCode(countryCode) ? HIGH.toString() :
+                CountryCodeRiskLevel.isMidRiskCountryCode(countryCode) ? MID.toString() :
                         LOW.toString();
 
         if (countryRisk.equals("HIGH")) {

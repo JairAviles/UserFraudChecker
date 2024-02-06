@@ -34,8 +34,8 @@ Build the project:
 # refresh state of dependencies
 ./gradlew -U
 
-# build the project
-./gradlew build
+# clean and build the project
+./gradlew clean build
 
 # run the project
 ./gradlew bootRun
