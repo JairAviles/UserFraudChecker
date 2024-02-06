@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 class UserController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserCheckerService userCheckerService;
@@ -30,7 +30,7 @@ class UserController {
         // Validates at least one request parameter is provided
         if (email.isEmpty() && phone.isEmpty()) {
             String errorMessage= "Must provide at least one request parameter";
-            log.error(errorMessage);
+            LOG.error(errorMessage);
 
             throw new BadRequestException(errorMessage);
         }
@@ -38,14 +38,14 @@ class UserController {
         // Validate email and phone number formats, when provided
         if (email.isPresent() && !ValidationUtil.isValidEmail(email.get())) {
             String errorMessage = "Invalid email format";
-            log.error(errorMessage);
+            LOG.error(errorMessage);
 
             throw new BadRequestException(errorMessage);
         }
 
         if (phone.isPresent() && !ValidationUtil.isValidPhoneNumber(phone.get())) {
             String errorMessage = "Invalid phone format";
-            log.error(errorMessage);
+            LOG.error(errorMessage);
 
             throw new BadRequestException(errorMessage);
         }
@@ -56,7 +56,7 @@ class UserController {
         // If no user record is found, throw a 404
         if (userRecord == null) {
             String errorMessage = "User record not found";
-            log.error(errorMessage);
+            LOG.error(errorMessage);
 
             throw new UserRecordNotFound(errorMessage);
         }

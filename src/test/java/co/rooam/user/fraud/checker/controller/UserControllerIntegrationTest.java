@@ -12,9 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static co.rooam.user.fraud.checker.util.MiscUtil.generateUserRecord;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
@@ -63,13 +65,14 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void givenUserCheckerService_whenCheckUserAndRecordExists_thenReturnsOkStatus() throws Exception {
-        UserRecord mockUserRecord = new UserRecord("1", "John", "Doe", "1234567890", "email", "US");
+        UserRecord mockUserRecord = generateUserRecord("email@test.com", "5553330022");
 
         // had to mock this function due to the random function call
         given(userCheckerService.findUserRecord(anyString(), anyString())).willReturn(mockUserRecord);
 
         mockMvc.perform(get("/api/users?email=test.user@example.com&phone=1234567890")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn();
     }
 }

@@ -10,46 +10,40 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import static co.rooam.user.fraud.checker.util.RandomUtil.generateWeightedRandomBoolean;
+import static co.rooam.user.fraud.checker.util.MiscUtil.*;
 import static co.rooam.user.fraud.checker.util.RiskLevel.*;
 
 @Service
 public class UserCheckerServiceImpl implements UserCheckerService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserCheckerServiceImpl.class);
-    private final Faker faker = new Faker();
+    private static final Logger LOG = LoggerFactory.getLogger(UserCheckerServiceImpl.class);
+    private final Faker FAKER = new Faker();
     private final List<String> riskFactors = new ArrayList<>();
 
     // This function contains the logic definition for checking the user.
     // For the sake of this code challenge, I'll stub user record via Faker library
+    @Override
     public UserRecord findUserRecord(String email, String phone) {
 
-        String recordEmail = email != null ? email : faker.internet().emailAddress();
-        String recordPhone = phone != null ? phone : faker.phoneNumber().phoneNumber();
+        String recordEmail = email != null ? email : generateEmail();
+        String recordPhone = phone != null ? phone : generatePhone();
 
-        log.info("Checking record for user with email: " + recordEmail + " and phone: " + recordPhone);
+        LOG.info("Checking record for user with email: " + recordEmail + " and phone: " + recordPhone);
 
         // This function is used to simulate a null record found
         // 25% chance (out of 100%) of returning true.
         if (generateWeightedRandomBoolean(100, 25)) {
-            log.warn("User record not found.");
+            LOG.warn("User record not found.");
             return null;
         }
 
         // If no null returned, retrieve a user record instead
-        return new UserRecord(
-                UUID.randomUUID().toString(),
-                faker.name().firstName(),
-                faker.name().lastName(),
-                recordPhone,
-                recordEmail,
-                faker.address().countryCode()
-        );
+        return generateUserRecord(recordEmail, recordPhone);
     }
 
     // This function returns the risk level of the user based on the score calculated
+    @Override
     public UserRisk returnUserRisk(UserRecord userRecord) {
         riskFactors.clear(); // Clear risk factors list
 
