@@ -38,3 +38,7 @@ out/
 
 ### MacOs ###
 .DS_Store
+
+# SAM files
+samconfig.toml
+.aws-sam

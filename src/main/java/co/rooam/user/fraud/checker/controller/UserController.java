@@ -6,7 +6,6 @@ import co.rooam.user.fraud.checker.model.UserRecord;
 import co.rooam.user.fraud.checker.model.UserRisk;
 import co.rooam.user.fraud.checker.service.UserCheckerService;
 import co.rooam.user.fraud.checker.util.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +20,11 @@ import java.util.Optional;
 class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+    private final UserCheckerService userCheckerService;
 
-    @Autowired
-    private UserCheckerService userCheckerService;
+    UserController(UserCheckerService userCheckerService) {
+        this.userCheckerService = userCheckerService;
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserRisk> checkUser(@RequestParam("email") Optional<String> email, @RequestParam("phone") Optional<String> phone) {
