@@ -9,6 +9,7 @@ import java.util.UUID;
 public class MiscUtil {
 
     private static final Faker FAKER = new Faker();
+    private static final String TEST_TOKEN = "sgp_3L89du4eEJNZNSx3tsoV2LqCsAgJFTz05Ged4wVpHWchN7t2MMBL6ZMPhi8sbL3x"; // This will be revoked by GH secrets scanning flow
 
     public static UserRecord generateUserRecord(String email, String phone) {
         return new UserRecord(
